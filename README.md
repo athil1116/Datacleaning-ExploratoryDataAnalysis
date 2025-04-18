@@ -5,7 +5,6 @@
 
 This project focuses on cleaning and transforming raw data using SQL. The goal is to ensure the dataset is structured, consistent, and ready for analysis or visualization.
 
----
 
 ## 📁 Project Structure
 
@@ -26,9 +25,9 @@ sql-data-cleaning/
 
 ## 🛠️ Tools & Technologies
 
-- **SQL (PostgreSQL / MySQL / SQLite)** – core language for data cleaning
-- **DBMS**: [Your DB here, e.g., PostgreSQL 15]
-- Optional: Data visualization tool (e.g., Tableau, Power BI)
+- **SQL ( MySQL /)** – core language for data cleaning
+- **DBMS**: [SQL]
+
 
 ---
 
