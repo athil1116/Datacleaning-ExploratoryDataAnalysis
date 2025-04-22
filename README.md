@@ -1,10 +1,11 @@
 
-# 🧹 SQL Data Cleaning Project
+# 🧹 SQL Data Cleaning & Exploratory Data Analysis (EDA)
 
 ## 📋 Overview
 
 This project focuses on cleaning and transforming raw data using SQL. The goal is to ensure the dataset is structured, consistent, and ready for analysis or visualization.
-
+Exploratory Data Analysis (EDA), 
+is the process of analyzing and summarizing the main characteristics of a dataset, often using visual methods and descriptive statistics. It serves as a crucial first step in the data analysis pipeline, enabling data scientists and analysts to better understand the structure, patterns, and relationships within the data before applying any formal modeling techniques.
 
 ## 📁 Project Structure
 
