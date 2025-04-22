@@ -201,42 +201,119 @@ FROM layoffs_staging2;
 - Filtering out irrelevant data
 
 ---
+# 📊 Exploratory Data Analysis (EDA) – [Layoffs staging 2]
 
-## 🔄 How to Run
+Welcome to the Exploratory Data Analysis (EDA) for the **[Layoffs staging 2]** dataset. This project focuses on understanding the structure, patterns, and relationships within the dataset through visualization and statistical summaries.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/sql-data-cleaning.git
-   cd sql-data-cleaning
-   ```
+## 🔍 Project Overview
 
-2. Set up your database and import the raw data.
+The primary goal of this EDA is to:
+- Understand the data distribution
+- Identify and handle missing or inconsistent values
+- Detect outliers or anomalies
+- Explore relationships between features
+- Prepare insights for potential modeling or further analysis
 
-3. Run the SQL scripts in the `scripts/` directory in order:
-   ```sql
-   \i scripts/step1_remove_nulls.sql
-   \i scripts/step2_standardize_dates.sql
-   -- and so on...
-   ```
+## 📁 Repository Structure
 
-4. Cleaned data will be available in your target schema/table or in exported CSV files.
+SELECT * 
+FROM layoffs_staging2;
 
----
+SELECT MAX(total_laid_off), MAX(percentage_laid_off)                                         ##the maximum values of total_laid_off and percentage_laid_off from the layoffs_staging2
+FROM  layoffs_staging2;                                                                          
 
-## 🧠 Learnings
+SELECT * 
+FROM layoffs_staging2
+WHERE percentage_laid_off = 1
+ORDER BY funds_raised_millions DESC;
 
-Through this project, I practiced:
-- Writing efficient SQL queries
-- Data profiling & diagnostics
-- Understanding of data integrity and normalization
 
----
+SELECT company, SUM(total_laid_off)
+FROM layoffs_staging2                                                               ###the total number of layoffs per company and ordering the results from highest to lowest
+GROUP BY company
+ORDER BY 2 DESC;
 
-## 📬 Contact
+SELECT MIN(`date`), MAX(`date`)                                                   ##the earliest and latest dates in the layoffs_staging2
+FROM layoffs_staging2;
 
-For questions, suggestions, or collaborations:
+SELECT industry, SUM(total_laid_off)                                              ## total layoffs by industry
+FROM layoffs_staging2
+GROUP BY industry
+ORDER BY 2 DESC;
 
-**Your Name**  
-[LinkedIn](https://linkedin.com/in/yourname) | [Email] athilchandramoahn@gamail.com
+SELECT *
+FROM layoffs_staging2;
+
+SELECT country, SUM(total_laid_off)
+FROM layoffs_staging                                                            ## Total layoffs by the country
+GROUP BY country                                                                         
+ORDER BY 2 DESC;
+
+SELECT YEAR(`date`), SUM(total_laid_off)                                       ##total layoffs per year, ordered from most to least
+FROM layoffs_staging2
+GROUP BY YEAR(`date`)
+ORDER BY 2 DESC;
+
+
+
+SELECT stage, AVG(percentage_laid_off)                                     ##the average percentage of layoffs
+FROM layoffs_staging2
+GROUP BY stage
+ORDER BY 2 DESC;
+
+SELECT company,AVG(total_laid_off)
+FROM layoffs_staging2
+GROUP BY company
+ORDER BY 2 DESC;
+
+
+
+SELECT * 
+FROM layoffs_staging2;
+
+SELECT SUBSTRING(`date` ,1,7) AS `MONTH` , SUM(total_laid_off)                           
+FROM layoffs_staging2
+WHERE  SUBSTRING(`date` ,1,7) IS NOT NULL
+GROUP BY `MONTH`
+ORDER BY 1 ASC
+;
+
+WITH Rolling_Total AS
+(
+SELECT SUBSTRING(`date` ,1,7) AS `MONTH` , SUM(total_laid_off) AS total_off                   ##CTE,Aggregates total layoffs per month
+FROM layoffs_staging2
+WHERE  SUBSTRING(`date` ,1,7) IS NOT NULL
+GROUP BY `MONTH`
+ORDER BY 1 ASC
+)
+SELECT `MONTH` , total_off
+,SUM(total_off) OVER(ORDER BY `MONTH`) AS rolling_total                                                       
+FROM Rolling_Total;
+
+SELECT company, YEAR(`date`), SUM(total_laid_off)
+FROM layoffs_staging2
+GROUP BY company, YEAR(`date`)
+ORDER BY 3 DESC;
+
+WITH  Company_Year (company, years,  total_laid_off) AS
+(
+SELECT company, YEAR(`date`), SUM(total_laid_off)                                               ##Aggregates layoffs by company & year
+FROM layoffs_staging2                                                                           ##Ranks companies within each year based on layoffs using DENSE_RANK
+GROUP BY company, YEAR(`date`)                                                                  ##Filters to the top 5 companies per year
+), Company_Year_Rank AS
+(SELECT *, DENSE_RANK() OVER (PARTITION BY years ORDER BY total_laid_off DESC) AS Ranking
+FROM company_year
+WHERE years IS NOT NULL
+)
+SELECT *
+FROM Company_Year_Rank
+WHERE Ranking <= 5
+
+
+
+  
+
+
+
 
 
